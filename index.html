@@ -20635,21 +20635,23 @@
   --grad:linear-gradient(135deg,#1e2a78,#6d3fc9);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{margin:0;padding:0;}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;}
 body{
   background:var(--bg-app);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   color:var(--text);
-  display:flex; justify-content:center; min-height:100vh;
+  display:flex; justify-content:center;
+  height:100vh; height:100dvh;
 }
 p{margin:0;}
 .phone{
-  width:100%; max-width:412px; min-height:100vh;
+  width:100%; max-width:412px;
+  height:100vh; height:100dvh;
   background:var(--white); position:relative; overflow:hidden;
   display:flex; flex-direction:column;
   box-shadow:0 0 40px rgba(0,0,0,0.08);
 }
-@media(min-width:430px){ .phone{ margin:20px 0; min-height:auto; height:860px; border-radius:28px; } }
+@media(min-width:430px){ body{overflow:auto;} .phone{ margin:20px 0; height:860px; border-radius:28px; } }
 
 /* header */
 .hdr{ background:var(--grad); padding:18px 18px 18px; flex-shrink:0; }
@@ -20774,6 +20776,11 @@ p{margin:0;}
 .badge{ display:inline-block; font-size:11px; font-weight:500; padding:3px 9px; border-radius:20px;}
 .badge.ok{ background:var(--teal-50); color:var(--teal-800);} .badge.warn{ background:var(--amber-50); color:var(--amber-800);}
 
+/* period toggle */
+.ptoggle{ display:flex; background:var(--surface); border-radius:10px; padding:3px; margin-bottom:14px; }
+.pseg{ flex:1; text-align:center; font-size:12px; padding:7px 0; color:var(--text-2); border-radius:8px; cursor:pointer; }
+.pseg.on{ background:var(--white); color:var(--text); font-weight:500; box-shadow:0 1px 2px rgba(0,0,0,0.06); }
+
 /* bottom nav */
 .nav{ display:flex; justify-content:space-around; padding:9px 0 11px; border-top:0.5px solid var(--border); background:var(--white); flex-shrink:0;}
 .navi{ display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--text-2); cursor:pointer; flex:1; }
@@ -20855,6 +20862,16 @@ const STUDENTS = {
     contact:"+91 97393 30484", father:"Thomas Varghese", mother:"Priya Varghese",
     mentor:{ name:"Mr. Arun Sharma", initial:"AS", subject:"Physics & Chemistry mentor" },
     snapshot:{ attendance:92, attendanceBad:false, lastTest:78, lastTestUp:true, syllabus:34, activeDays:5 },
+    periods:{
+      weekly:{ attendance:92, attendanceBad:false, activeDays:"5/7", attLabel:"This week" },
+      monthly:{ attendance:90, attendanceBad:false, activeDays:"22/30", attLabel:"This month" },
+      year:{ attendance:91, attendanceBad:false, activeDays:"162/180", attLabel:"This year" },
+    },
+    attendancePeriods:{
+      weekly:{ pct:92, classes:"11 of 12 classes attended", note:"Above the 90% target · steady from last week", bad:false, tasksDone:3, tasksTotal:3, tasksPct:100, tasksNote:"3 of 3 tasks completed this week", consistency:"5 of 7 days", consistencyTrend:"Better than last week" },
+      monthly:{ pct:90, classes:"43 of 48 classes attended", note:"At the 90% target · consistent this month", bad:false, tasksDone:11, tasksTotal:12, tasksPct:92, tasksNote:"11 of 12 tasks completed this month", consistency:"22 of 30 days", consistencyTrend:"Steady this month" },
+      year:{ pct:91, classes:"246 of 270 classes attended", note:"Above the 90% target across the year", bad:false, tasksDone:68, tasksTotal:72, tasksPct:94, tasksNote:"68 of 72 tasks completed this year", consistency:"162 of 180 days", consistencyTrend:"Strong overall" },
+    },
     attention:[ {type:"good", icon:"ti-check", title:"All caught up!", desc:"No items need your attention right now"} ],
     overview:{ score:78, scoreDelta:"+5%", scoreUp:true, syllabus:34, mastery:61 },
     tests:[
@@ -20888,6 +20905,16 @@ const STUDENTS = {
     contact:"+91 97393 30484", father:"Thomas Varghese", mother:"Priya Varghese",
     mentor:{ name:"Ms. Reena Nair", initial:"RN", subject:"Class 8 mentor" },
     snapshot:{ attendance:78, attendanceBad:true, lastTest:65, lastTestUp:false, syllabus:18, activeDays:3 },
+    periods:{
+      weekly:{ attendance:78, attendanceBad:true, activeDays:"3/7", attLabel:"This week" },
+      monthly:{ attendance:82, attendanceBad:true, activeDays:"14/30", attLabel:"This month" },
+      year:{ attendance:86, attendanceBad:false, activeDays:"118/150", attLabel:"This year" },
+    },
+    attendancePeriods:{
+      weekly:{ pct:78, classes:"9 of 11 classes attended", note:"Below the 90% target · down from 88% last week", bad:true, tasksDone:1, tasksTotal:4, tasksPct:25, tasksNote:"1 of 4 tasks completed this week", consistency:"3 of 7 days", consistencyTrend:"Lower than last week" },
+      monthly:{ pct:82, classes:"39 of 48 classes attended", note:"Below the 90% target this month", bad:true, tasksDone:9, tasksTotal:16, tasksPct:56, tasksNote:"9 of 16 tasks completed this month", consistency:"14 of 30 days", consistencyTrend:"Patchy this month" },
+      year:{ pct:86, classes:"129 of 150 classes attended", note:"Slightly below target over the year", bad:false, tasksDone:34, tasksTotal:52, tasksPct:65, tasksNote:"34 of 52 tasks completed this year", consistency:"118 of 150 days", consistencyTrend:"Room to improve" },
+    },
     attention:[
       {type:"amber", icon:"ti-alert-triangle", title:"Maths ability score dipped", desc:"Down from 62% to 44% over the last 2 weeks — may be worth revisiting Algebra basics"},
       {type:"red", icon:"ti-calendar-x", title:"Attendance below target", desc:"78% this week, below the 90% target — 2 classes missed"},
@@ -20922,6 +20949,7 @@ const STUDENTS = {
 
 let current = "eden";
 let activeTab = "home";
+let period = "weekly"; // weekly | monthly | year
 let subPage = null; // null | 'profile'|'student'|'subscription'|'notifications'
 let msgFilter = "personal";
 
@@ -20933,7 +20961,8 @@ function renderHeader(){
   const s = S();
   if(subPage){ $("app-header").innerHTML = ""; return; } // sub pages render own header in screen
   let title, sub, hi="";
-  if(activeTab==="home"){ title="Welcome"; sub=""; hi="Hi Priya,"; sub="here's "+s.name+"'s week at a glance"; }
+  const periodWord = period==="weekly"?"week":(period==="monthly"?"month":"year");
+  if(activeTab==="home"){ title="Welcome"; hi="Hi Priya,"; sub="Here's "+s.name+"'s "+periodWord+" at a glance"; }
   if(activeTab==="performance"){ title="Performance"; sub="How "+s.name+" is doing in each subject"; }
   if(activeTab==="activity"){ title="Activity"; sub=s.name+"'s study habits and attendance"; }
   if(activeTab==="mentor"){ title="Mentor"; sub=s.name+"'s mentor"; }
@@ -20960,6 +20989,13 @@ function kidPill(){
     <i class="ti ti-chevron-down"></i></div>`;
 }
 
+/* ---------- PERIOD TOGGLE ---------- */
+function periodToggle(){
+  const opts=[["weekly","Weekly"],["monthly","Monthly"],["year","Year"]];
+  return `<div class="ptoggle">`+opts.map(([id,lb])=>
+    `<div class="pseg ${period===id?'on':''}" onclick="setPeriod('${id}')">${lb}</div>`).join("")+`</div>`;
+}
+
 /* ---------- SCREENS ---------- */
 function screenHome(){
   const s=S();
@@ -20970,6 +21006,7 @@ function screenHome(){
   }).join("");
   const more = s.attention.length>2
     ? `<span class="link" onclick="goNotifications()">View all (${s.attention.length}) <i class="ti ti-chevron-right"></i></span>` : ``;
+  const p = s.periods[period];
   const snap=s.snapshot;
   return kidPill()+`
     <div class="card profile">
@@ -20983,12 +21020,13 @@ function screenHome(){
     </div>
     <div class="section-row"><span class="section-lbl">Requires your attention</span>${more}</div>
     ${attn}
-    <div class="section-row"><span class="section-lbl">This week</span></div>
+    ${periodToggle()}
+    <div class="section-row"><span class="section-lbl">${p.attLabel}</span></div>
     <div class="grid2">
-      <div class="stat"><p class="l">Attendance</p><p class="v ${snap.attendanceBad?'bad':''}">${snap.attendance}%</p></div>
+      <div class="stat"><p class="l">Attendance</p><p class="v ${p.attendanceBad?'bad':''}">${p.attendance}%</p></div>
       <div class="stat"><p class="l">Last test</p><p class="v ${snap.lastTestUp?'good':'bad'}">${snap.lastTest}% <i class="ti ti-arrow-${snap.lastTestUp?'up-right':'down-right'}" style="font-size:14px"></i></p></div>
       <div class="stat"><p class="l">Syllabus progress</p><p class="v">${snap.syllabus}%</p></div>
-      <div class="stat"><p class="l">Active days</p><p class="v">${snap.activeDays}/7</p></div>
+      <div class="stat"><p class="l">Active days</p><p class="v">${p.activeDays}</p></div>
     </div>`;
 }
 
@@ -21020,11 +21058,17 @@ function screenPerformance(){
 }
 
 function screenActivity(){
-  const s=S(), a=s.attendance, t=s.tasks;
+  const s=S();
+  const a=s.attendancePeriods[period];
+  const periodWord = period==="weekly"?"week":(period==="monthly"?"month":"year");
   const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const week = s.week.map((on,i)=>`<div class="day"><div class="blk ${on?'on':'off'}"></div><p class="lb">${days[i]}</p></div>`).join("");
+  const consistencyBlock = period==="weekly"
+    ? `<div class="week">${week}</div>`
+    : ``;
   return kidPill()+`
-    <div class="section-row"><span class="section-lbl">Attendance this week</span></div>
+    ${periodToggle()}
+    <div class="section-row"><span class="section-lbl">Attendance this ${periodWord}</span></div>
     <div class="att-card ${a.bad?'bad':'ok'}">
       <div class="att-row"><p class="att-big">${a.pct}%</p><p class="att-small">${a.classes}</p></div>
       <p class="att-note">${a.note}</p>
@@ -21032,18 +21076,18 @@ function screenActivity(){
     <div class="section-row"><span class="section-lbl">Study consistency</span></div>
     <div class="card">
       <div style="display:flex;justify-content:space-between;margin-bottom:10px">
-        <p style="font-size:13px"><b style="font-weight:500">${s.activeDays} of 7 days</b> active this week</p>
-        <span style="font-size:11px;color:var(--teal-700);font-weight:500">${s.weekTrend}</span>
+        <p style="font-size:13px"><b style="font-weight:500">${a.consistency}</b> active this ${periodWord}</p>
+        <span style="font-size:11px;color:var(--teal-700);font-weight:500">${a.consistencyTrend}</span>
       </div>
-      <div class="week">${week}</div>
+      ${consistencyBlock}
     </div>
     <div class="section-row"><span class="section-lbl">Daily tasks</span></div>
     <div class="card">
       <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-        <p style="font-size:13px"><b style="font-weight:500">${t.done} of ${t.total}</b> tasks completed this week</p>
+        <p style="font-size:13px"><b style="font-weight:500">${a.tasksDone} of ${a.tasksTotal}</b> tasks completed this ${periodWord}</p>
         <i class="ti ti-list-check" style="font-size:18px;color:var(--text-3)"></i>
       </div>
-      <div class="bar" style="height:6px"><i style="width:${t.pct}%;height:6px;background:var(--teal-strong)"></i></div>
+      <div class="bar" style="height:6px"><i style="width:${a.tasksPct}%;height:6px;background:var(--teal-strong)"></i></div>
     </div>`;
 }
 
@@ -21176,6 +21220,7 @@ function render(){
 
 /* ---------- ACTIONS ---------- */
 function setTab(id){ subPage=null; activeTab=id; render(); }
+function setPeriod(p){ period=p; render(); }
 function openSubPage(p){ subPage=p; closeDrawer(); render(); }
 function closeSubPage(){ subPage=null; render(); }
 function goNotifications(){ subPage='notifications'; render(); }
